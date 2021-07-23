@@ -8,32 +8,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.javaex.vo.PersonVo;
 
+@Repository
 public class PhoneDao {
+	
+	@Autowired
+	private DataSource dataSource; //--> applicationContext.xml세팅으로 해결
 
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-
-	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	private String id = "phonedb";
-	private String pw = "phonedb";
-
+	
 	// 데이터베이스 연결
 	private void getconnection() {
 		try {
-			// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
 			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
+			//conn = DriverManager.getConnection(url, id, pw);
+			conn = dataSource.getConnection();
+			
 			// 3. SQL문 준비 / 바인딩 / 실행
 
 			// 4.결과처리
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		}
